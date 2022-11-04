@@ -1,3 +1,4 @@
+///////////EXAMNE GIT
 #define _USE_MATH_DEFINES
 #include <opencv2/core/core.hpp>
 #include <opencv2/highgui/highgui.hpp>
@@ -142,7 +143,7 @@ Mat aplicarFiltro(Mat imagenOriginal, Mat matrizConBordes, vector<vector<float>>
 
     for (int i = 0; i < filas; i++) {
         for (int j = 0; j < columnas; j++) {
-            uchar val = uchar(convolucion(matrizConBordes, mascara, kernel, i, j));
+            float val = abs(static_cast<int>(convolucion(matrizConBordes, mascara, kernel, i, j)));
             imagenFiltroAplicado.at<uchar>(Point(i, j)) = val;
         }
     }
@@ -155,221 +156,67 @@ Mat aplicarFiltro(Mat imagenOriginal, Mat matrizConBordes, vector<vector<float>>
 
 ////////////////////    FILTRO SOBEL   //////////////////// 
 //////     GRADENTES
+//tomamos como ejemplo la generacion del Kernel con vector<vector<
+//a cada uno se asigna el valr correspodiente de la gradientes
 vector<vector<float>> grad_Gx() {
     //vector que tiene los valores de la Gx
-    vector<vector<float>> mascara(3, vector<float>(3, 0));
+    vector<vector<float>> gradiente(3, vector<float>(3, 0));
     //valores Gx
-    mascara[0][0] = -1;
-    mascara[0][1] = 0;
-    mascara[0][2] = 1;
+    gradiente[0][0] = -1;
+    gradiente[0][1] = 0;
+    gradiente[0][2] = 1;
 
-    mascara[1][0] = -2;
-    mascara[1][1] = 0;
-    mascara[1][2] = 2;
+    gradiente[1][0] = -2;
+    gradiente[1][1] = 0;
+    gradiente[1][2] = 2;
 
-    mascara[2][0] = -1;
-    mascara[2][1] = 0;
-    mascara[2][2] = 1;
+    gradiente[2][0] = -1;
+    gradiente[2][1] = 0;
+    gradiente[2][2] = 1;
 
-    return mascara;
+    return gradiente;
 }
 
 vector<vector<float>> grad_Gy() {
     //vector que tiene los valores de la Gy
-    vector<vector<float>> mascara(3, vector<float>(3, 0));
+    vector<vector<float>> gradiente(3, vector<float>(3, 0));
     //valores Gy
-    mascara[0][0] = -1;
-    mascara[0][1] = -2;
-    mascara[0][2] = -1;
+    gradiente[0][0] = -1;
+    gradiente[0][1] = -2;
+    gradiente[0][2] = -1;
 
-    mascara[1][0] = 0;
-    mascara[1][1] = 0;
-    mascara[1][2] = 0;
+    gradiente[1][0] = 0;
+    gradiente[1][1] = 0;
+    gradiente[1][2] = 0;
 
-    mascara[2][0] = 1;
-    mascara[2][1] = 2;
-    mascara[2][2] = 1;
+    gradiente[2][0] = 1;
+    gradiente[2][1] = 2;
+    gradiente[2][2] = 1;
 
-    return mascara;
-}
-
-//////////////////////////////////////////////////////////////
-Mat normalize(Mat original, int newMin, int newMax)
-{
-    int rows = original.rows;
-    int cols = original.cols;
-    float constant = 0.0;
-    int min = original.at<uchar>(Point(0, 0));
-    int max = original.at<uchar>(Point(0, 0));
-
-    Mat result(rows, cols, CV_8UC1);
-
-    // Get max and min intensity value from original grayscale image
-    for (int i = 0; i < rows; i++)
-    {
-        for (int j = 0; j < cols; j++)
-        {
-            if (max < original.at<uchar>(Point(i, j)))
-            {
-                max = original.at<uchar>(Point(i, j));
-            }
-
-            if (min > original.at<uchar>(Point(i, j)))
-            {
-                min = original.at<uchar>(Point(i, j));
-            }
-        }
-    }
-
-    /*cout << "El valor maximo es: " << max << endl;
-    cout << "El valor minimo es: " << min << endl;*/
-
-    constant = (newMax - newMin) / (max - min);
-
-    for (int i = 0; i < rows; i++)
-    {
-        for (int j = 0; j < cols; j++)
-        {
-            result.at<uchar>(Point(i, j)) = (original.at<uchar>(Point(i, j)) - min) * constant + newMin;
-        }
-    }
-
-    return result;
+    return gradiente;
 }
 
 
-Mat binarizar(Mat original)
-{
-    int rows = original.rows;
-    int cols = original.cols;
+Mat Sobel(Mat imgGx, Mat imgGy) {
 
-    Mat result(rows, cols, CV_8UC1);
-
-    for (int i = 0; i < rows; i++) {
-        for (int j = 0; j < cols; j++) {
-            if (original.at<uchar>(Point(i, j)) > uchar(30)) {
-                result.at<uchar>(Point(i, j)) = uchar(255);
-            }
-            else {
-                result.at<uchar>(Point(i, j)) = uchar(0);
-            }
-        }
-    }
-
-    return result;
-}
-
-Mat elevarImagenCuadrada(Mat matriz) {
-
-    int filas = matriz.rows;
-    int columnas = matriz.cols;
-
-    Mat matrizCuadrada(filas, columnas, CV_8UC1);
-
-    for (int i = 0; i < filas; i++) {
-        for (int j = 0; j < columnas; j++) {
-            int val = pow(matriz.at<uchar>(Point(i, j)), 2);
-            matrizCuadrada.at<uchar>(Point(i, j)) = uchar(val);
-        }
-    }
-
-    return matrizCuadrada;
-}
-
-Mat sumaMatrices(Mat matriz1, Mat matriz2) {
-
-    int filas = matriz1.rows;
-    int columnas = matriz2.cols;
-
-    Mat matrizResultante(filas, columnas, CV_8UC1);
-
-    for (int i = 0; i < filas; i++) {
-        for (int j = 0; j < columnas; j++) {
-            matrizResultante.at<uchar>(Point(i, j)) = matriz1.at<uchar>(Point(i, j)) + matriz2.at<uchar>(Point(i, j));
-        }
-    }
-
-    return matrizResultante;
-}
-
-Mat normalizarIntensidades(Mat matrizResultante) {
-    int filas = matrizResultante.rows;
-    int columnas = matrizResultante.cols;
-    int umbral = 120;
+    int filas = imgGx.rows;
+    int columnas = imgGy.cols;
 
     Mat sobel(filas, columnas, CV_8UC1);
 
+    float u = 127.5;            //valor maximo para ubralado
+    double  d;       //varibes para distancia
+    
+
     for (int i = 0; i < filas; i++) {
         for (int j = 0; j < columnas; j++) {
-            int intensidad = matrizResultante.at<uchar>(Point(i, j));
 
+            double Gx_value = imgGx.at<uchar>(Point(j, i));
+            double Gy_value = imgGy.at<uchar>(Point(j, i));
+
+            double intensidad = sqrt(pow(Gx_value, 2) + pow(Gy_value, 2));
             intensidad = static_cast<int>(intensidad);
-
-            if (intensidad > umbral) {
-                intensidad = 255;
-            }
-            else {
-                intensidad = 0;
-            }
-            sobel.at<uchar>(Point(i, j)) = uchar(intensidad);
-        }
-    }
-    return sobel;
-}
-
-Mat raizMatriz(Mat matriz) {
-    int filas = matriz.rows;
-    int columnas = matriz.cols;
-    int raiz = 0;
-
-    Mat matrizResultante(filas, columnas, CV_8UC1);
-
-    for (int i = 0; i < filas; i++) {
-        for (int j = 0; j < columnas; j++) {
-            raiz = sqrt(matriz.at<uchar>(Point(i, j)));
-            matrizResultante.at<uchar>(Point(i, j)) = uchar(raiz);
-        }
-    }
-
-    return matrizResultante;
-}
-
-double calcularDireccion(vector<vector<float>> Gx, vector<vector<float>> Gy) {
-
-    double valX, valY, direccion;
-
-    for (int i = 0; i < 3; i++) {
-        for (int j = 0; j < 3; j++) {
-            valX = Gx[i][j];
-            valY = Gy[i][j];
-            direccion = atan(valY / valX);
-        }
-    }
-
-    return direccion;
-}
-
-
-Mat filtroSobel(Mat imagenGx, Mat imagenGy) {
-
-    int filas = imagenGx.rows;
-    int columnas = imagenGy.cols;
-
-    Mat sobel(filas, columnas, CV_8UC1);
-
-    int umbral = 120;
-    double intensidad, direccion;
-    double valGx, valGy;
-
-    for (int i = 0; i < filas; i++) {
-        for (int j = 0; j < columnas; j++) {
-
-            valGx = imagenGx.at<uchar>(Point(j, i));
-            valGy = imagenGy.at<uchar>(Point(j, i));
-
-            intensidad = sqrt(pow(valGx, 2) + pow(valGy, 2));
-            intensidad = static_cast<int>(intensidad);
-            if (intensidad > umbral) {
+            if (intensidad > u) {
                 intensidad = 255;
             }
             else {
@@ -377,13 +224,12 @@ Mat filtroSobel(Mat imagenGx, Mat imagenGy) {
             }
 
             sobel.at<uchar>(Point(j, i)) = uchar(intensidad);
-            //direccion = atan(valor_y / valor_x);
+            d = atan(Gy_value / Gx_value);
         }
     }
 
     return sobel;
 }
-
 
 
 
@@ -434,6 +280,82 @@ Mat ecualizar(Mat imagen) {
 }
 
 
+////////////////////    CANNY   ////////////////////
+vector<vector<float>> grad_Hx() {
+    //vector que tiene los valores de la Gx
+    vector<vector<float>> mascara(3, vector<float>(3, 0));
+    //valores Gx
+    mascara[0][0] = -1;
+    mascara[0][1] = 0;
+    mascara[0][2] = 1;
+
+    mascara[1][0] = -2;
+    mascara[1][1] = 0;
+    mascara[1][2] = 2;
+
+    mascara[2][0] = -1;
+    mascara[2][1] = 0;
+    mascara[2][2] = 1;
+
+    return mascara;
+}
+
+vector<vector<float>> grad_Hy() {
+    //vector que tiene los valores de la Gy
+    vector<vector<float>> mascara(3, vector<float>(3, 0));
+    //valores Gy
+    mascara[0][0] = 1;
+    mascara[0][1] = 2;
+    mascara[0][2] = 1;
+
+    mascara[1][0] = 0;
+    mascara[1][1] = 0;
+    mascara[1][2] = 0;
+
+    mascara[2][0] = -1;
+    mascara[2][1] = -2;
+    mascara[2][2] = -1;
+
+    return mascara;
+}
+
+
+Mat FCanny(Mat imgGx, Mat imgGy) {
+
+    int filas = imgGx.rows;
+    int columnas = imgGy.cols;
+
+    Mat canny(filas, columnas, CV_8UC1);
+
+    float umbral = 127.5;
+    double intensidad, direccion;
+    double valGx, valGy;
+
+    for (int i = 0; i < filas; i++) {
+        for (int j = 0; j < columnas; j++) {
+
+            valGx = imgGx.at<uchar>(Point(j, i));
+            valGy = imgGy.at<uchar>(Point(j, i));
+
+            intensidad = sqrt(pow(valGx, 2) + pow(valGy, 2));
+            intensidad = static_cast<int>(intensidad);
+            if (intensidad > umbral) {
+                intensidad = 255;
+            }
+            else {
+                intensidad = 0;
+            }
+
+            canny.at<uchar>(Point(j, i)) = uchar(intensidad);
+            //direccion = atan(valor_y / valor_x);
+        }
+    }
+
+    return canny;
+}
+
+
+////////////////////    OBTENER IMPRIMIR TAMAÑO IMG   //////////////////// 
 
 void size_img(string name,Mat img) {
     cout << "\t"<< name << "\t";
@@ -492,12 +414,27 @@ int main()
     Mat imgGx = aplicarFiltro(imagenGaussiano, imgBordes, Gx, 3);   //aplicamos gradiantes GX y GY a la imagen
     Mat imgGy = aplicarFiltro(imagenGaussiano, imgBordes, Gy, 3);
 
-    Mat imgsobel = filtroSobel(imgGy, imgGx);  //suman ambas gradientes
-    Mat imgsobell = filtroSobel(imgGy, imgGx);  //suman ambas gradientes
+    Mat imgsobel = Sobel(imgGy, imgGx);  //suman ambas gradientes
+   
 
 
     ////////////////////    IMAGEN ECUALIZADA   //////////////////// 
     Mat imgEcualizada = ecualizar(imagen_gray);
+
+    ////////////////////    CANNY   //////////////////// 
+    vector<vector<float>> Hx = grad_Hx();       //varaibles que guardan las gradientes
+    vector<vector<float>> Hy = grad_Hy();
+
+    Mat imgHx = aplicarFiltro(imagenGaussiano, imgBordes, Hx, 3);   //aplicamos gradiantes GX y GY a la imagen
+    Mat imgHy = aplicarFiltro(imagenGaussiano, imgBordes, Hy, 3);
+
+    Mat imgcanny = FCanny(imgHy, imgHx);  //suman ambas gradientes
+
+    Mat imgCanny;
+    //Canny(imgcanny, imgCanny, 100, 200, Canny, false);
+    Canny(imagenGaussiano, imgCanny, 100, 200, 3, false);
+    
+
 
     ////////////////////    TAMAÑO DE C/IMAGENES   //////////////////// 
     cout << "\nTAMANO DE IMAGENES" << endl;
@@ -513,9 +450,9 @@ int main()
     mostrarImg("Imagen Escala de Grises", imagen_gray);
     mostrarImg("Imagen con Bordes", imgBordes);
     mostrarImg("Imagen con Filtro Gaussiano", imagenGaussiano);
-    mostrarImg("Imagen con Filtro Sobel", imgsobel);
-    mostrarImg("Imagen con Filtro Sobel2", imgsobell);
+    mostrarImg("Imagen con Filtro Sobel |Gx|", imgsobel);
     mostrarImg("Imagen Ecualizada", imgEcualizada);
+    mostrarImg("Imagen con Filtro Canny", imgCanny);
    
    
 

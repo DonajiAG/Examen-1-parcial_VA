@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+
+#otros
+.vs
+.vs/
