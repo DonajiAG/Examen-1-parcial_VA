@@ -1,0 +1,20 @@
+﻿  Source.cpp
+C:\Users\MARTHA\Documents\DAG\SCHOOL\ESCOM\5 SEMESTRE\VISION ARTIFICIAL\Practicas\Examen 1er parcial\Source.cpp(46,21): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\MARTHA\Documents\DAG\SCHOOL\ESCOM\5 SEMESTRE\VISION ARTIFICIAL\Practicas\Examen 1er parcial\Source.cpp(53,21): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\MARTHA\Documents\DAG\SCHOOL\ESCOM\5 SEMESTRE\VISION ARTIFICIAL\Practicas\Examen 1er parcial\Source.cpp(54,37): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\MARTHA\Documents\DAG\SCHOOL\ESCOM\5 SEMESTRE\VISION ARTIFICIAL\Practicas\Examen 1er parcial\Source.cpp(55,50): warning C4244: '=': conversion from 'double' to 'float', possible loss of data
+C:\Users\MARTHA\Documents\DAG\SCHOOL\ESCOM\5 SEMESTRE\VISION ARTIFICIAL\Practicas\Examen 1er parcial\Source.cpp(227,34): warning C4244: '=': conversion from 'int' to 'float', possible loss of data
+C:\Users\MARTHA\Documents\DAG\SCHOOL\ESCOM\5 SEMESTRE\VISION ARTIFICIAL\Practicas\Examen 1er parcial\Source.cpp(233,96): warning C4244: '=': conversion from 'float' to '_Tp', possible loss of data
+          with
+          [
+              _Tp=uchar
+          ]
+C:\Users\MARTHA\Documents\DAG\SCHOOL\ESCOM\5 SEMESTRE\VISION ARTIFICIAL\Practicas\Examen 1er parcial\Source.cpp(271,21): warning C4244: 'initializing': conversion from 'double' to 'int', possible loss of data
+C:\Users\MARTHA\Documents\DAG\SCHOOL\ESCOM\5 SEMESTRE\VISION ARTIFICIAL\Practicas\Examen 1er parcial\Source.cpp(329,24): warning C4244: '=': conversion from 'double' to 'int', possible loss of data
+C:\Users\MARTHA\Documents\DAG\SCHOOL\ESCOM\5 SEMESTRE\VISION ARTIFICIAL\Practicas\Examen 1er parcial\Source.cpp(361,24): warning C4101: 'direccion': unreferenced local variable
+C:\Users\MARTHA\Documents\DAG\SCHOOL\ESCOM\5 SEMESTRE\VISION ARTIFICIAL\Practicas\Examen 1er parcial\Source.cpp(427,72): warning C4244: '=': conversion from 'double' to '_Tp', possible loss of data
+          with
+          [
+              _Tp=uchar
+          ]
+  Examen 1er parcial.vcxproj -> C:\Users\MARTHA\Documents\DAG\SCHOOL\ESCOM\5 SEMESTRE\VISION ARTIFICIAL\Practicas\Examen 1er parcial\x64\Debug\Examen 1er parcial.exe
